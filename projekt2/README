@@ -1,0 +1,31 @@
+Autor: Sara Skutova, xskuto00@stud.fit.vutbr.cz
+Projekt: 2. projekt do IPK, UDP tester
+Datum: 3. 5. 2015
+Soubory: Makefile, ipkperfclient, ipkperfserver, README
+
+Spusteni
+	./ipkperfclient [-p server_port] [-s packet_size] [-r packet_rate] [-t runtime] [-i interval] SERVER
+	./ipkperfserver [-p port]
+
+Implementace
+	KIENT
+	Nejdrive se pomoci getopt_long() zpracuji parametry a overi se jejich spravnost,
+	v pripade chyby se vypise chybove hlaseni.
+	Nasledne se vytvori soket a nakonfiguruje struktura s adresou odesilani.
+	Dale se vytvori 2 prosesy (jeden na odesilani paketu, druhy na prijem).
+	V procesu na odesilani se vytvori zprava, ktera se bude na server odesilat, jeji format
+	je: N. x ------ pricemz x je poradove cislo paketu (o tom jaka budou poradova cisla rohoduji
+	parametry spusteni), dale se do zbyvajiciho volneho mista vlozi znaky '-' (zbyvajici volne misto,
+	taktez zalezi od parametru). Po odeslani zpravy se do sdilene promenne time_s vlozi cas kdy byla 
+	zprava odeslana.
+	V procesu na prijem zprav se kazda zprava rozlozi aby se zjistilo poradove cislo zpravy, pote se
+	do pozadovaneho policka slidene pormenne time_r vlozi cas prijmu zpravy.
+	Po ukonceni prosecu pro odesilani a prijem se ziskane statisticke hodnoty vyhodnoti a v pozadovanem
+	formatu se ulozi do pozadovaneho souboru.
+	Klient se ukonci bud po vyprseni casu (dle parametru) nebo pri zaslani signalu SIGINT.
+	SERVER
+	Server pouze prijima a nasledne hned odesila data zpet klientovi. Zadnou dalsi funkcnost nema.
+	Server se ukonci zaslanim signalu SIGINT.
+
+Co neni implementovano
+	Testovani skript, make test.
